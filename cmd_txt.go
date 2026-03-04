@@ -27,6 +27,10 @@ func runTxt(args []string) {
 	fs := flag.NewFlagSet("txt", flag.ExitOnError)
 	fs.Usage = func() { fmt.Fprint(os.Stderr, usageTxt) }
 	outputFile := fs.String("o", "", "出力テキストファイルパス")
+	// "txt main.pdf -flags" / "txt -flags main.pdf" どちらの順序も許容する
+	if len(args) > 0 && !strings.HasPrefix(args[0], "-") {
+		args = append(append([]string{}, args[1:]...), args[0])
+	}
 	fs.Parse(args) //nolint:errcheck
 
 	if fs.NArg() < 1 {

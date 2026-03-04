@@ -20,11 +20,13 @@ const usage = `Usage: pdf2image <subcommand> [options]
 
 Subcommands:
   image  PDFを PNG 画像に変換する
-  txt    PDFをテキストファイルに変換する
+  txt    PDFに埋め込まれたテキストを抽出する
+  ocr    PDFをレンダリングして NDLOCR-Lite で OCR する (*要 -tags ocr ビルド)
 
 詳細:
   pdf2image image --help
   pdf2image txt   --help
+  pdf2image ocr   --help
 `
 
 func main() {
@@ -38,6 +40,8 @@ func main() {
 		runImage(os.Args[2:])
 	case "txt":
 		runTxt(os.Args[2:])
+	case "ocr":
+		runOCR(os.Args[2:])
 	default:
 		fmt.Fprintf(os.Stderr, "不明なサブコマンド: %s\n\n%s", os.Args[1], usage)
 		os.Exit(1)

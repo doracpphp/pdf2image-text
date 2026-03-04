@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/klippa-app/go-pdfium/requests"
 )
@@ -27,6 +28,10 @@ func runImage(args []string) {
 	fs.Usage = func() { fmt.Fprint(os.Stderr, usageImage) }
 	outputDir := fs.String("o", ".", "PNG出力先ディレクトリ")
 	dpi := fs.Int("dpi", 150, "解像度")
+	// "image main.pdf -flags" / "image -flags main.pdf" どちらの順序も許容する
+	if len(args) > 0 && !strings.HasPrefix(args[0], "-") {
+		args = append(append([]string{}, args[1:]...), args[0])
+	}
 	fs.Parse(args) //nolint:errcheck
 
 	if fs.NArg() < 1 {
